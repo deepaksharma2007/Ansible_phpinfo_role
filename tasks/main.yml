@@ -1,0 +1,29 @@
+---
+# tasks file for phpinfo
+- name: "install php and httpd"
+  yum:
+   name: "{{item}}"
+   state: present
+  loop:
+  - "php"
+  - "httpd"
+
+- name: "starting service of htttpd"
+  service:
+   name: httpd
+   state: started
+   enabled: yes
+
+- name: "copying web page to webserver"
+  template:
+   src: "hello.php.j2"
+   dest: "/var/www/html/hello.php"
+
+- name: "in firewalld allowing webserver port"
+  firewalld:
+    port: 80/tcp
+    immediate: yes
+    permanent: yes
+    state: enabled
+ 
+  
